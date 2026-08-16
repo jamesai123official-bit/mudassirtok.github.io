@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MudassirTok - TikTok Clone</title>
+    <title>MudassirTok - Complete TikTok Clone</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -16,10 +17,18 @@
         body {
             background: #000;
             color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
         }
 
         /* ===== APP CONTAINER ===== */
@@ -47,25 +56,63 @@
             margin: 0 auto;
             left: 50%;
             transform: translateX(-50%);
+            animation: fadeIn 0.5s ease;
         }
 
         .auth-screen.hidden {
             display: none;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
         .auth-screen .logo {
-            font-size: 42px;
+            font-size: 48px;
             font-weight: 900;
-            background: linear-gradient(135deg, #ff0050, #00f2ea);
+            background: linear-gradient(135deg, #ff0050, #00f2ea, #ff0050);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
             margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .auth-screen .subtitle {
             color: #888;
             font-size: 14px;
             margin-bottom: 32px;
+            animation: fadeIn 0.8s ease;
         }
 
         .auth-screen .auth-box {
@@ -78,16 +125,19 @@
             padding: 14px 16px;
             margin-bottom: 12px;
             background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
+            border: 2px solid #2a2a2a;
+            border-radius: 14px;
             color: #fff;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            font-family: inherit;
         }
 
         .auth-screen input:focus {
             outline: none;
             border-color: #ff0050;
+            box-shadow: 0 0 0 4px rgba(255, 0, 80, 0.15);
+            background: #222;
         }
 
         .auth-screen .auth-btn {
@@ -95,23 +145,35 @@
             padding: 14px;
             background: linear-gradient(135deg, #ff0050, #ff2d55);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: #fff;
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: all 0.3s;
             margin-top: 8px;
+            position: relative;
+            overflow: hidden;
         }
 
         .auth-screen .auth-btn:hover {
-            opacity: 0.8;
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(255, 0, 80, 0.3);
+        }
+
+        .auth-screen .auth-btn:active {
+            transform: scale(0.98);
         }
 
         .auth-screen .auth-btn.secondary {
             background: transparent;
-            border: 1px solid #333;
+            border: 2px solid #333;
             margin-top: 8px;
+        }
+
+        .auth-screen .auth-btn.secondary:hover {
+            border-color: #ff0050;
+            background: rgba(255, 0, 80, 0.05);
         }
 
         .auth-screen .auth-switch {
@@ -125,13 +187,15 @@
             color: #ff0050;
             cursor: pointer;
             font-weight: 600;
+            transition: color 0.3s;
         }
 
         .auth-screen .auth-switch span:hover {
+            color: #ff2d55;
             text-decoration: underline;
         }
 
-        /* ===== MAIN APP (hidden until auth) ===== */
+        /* ===== MAIN APP ===== */
         .main-app {
             display: none;
             height: 100vh;
@@ -150,7 +214,7 @@
             right: 0;
             z-index: 100;
             padding: 12px 16px;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -160,11 +224,13 @@
         }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 900;
-            background: linear-gradient(135deg, #ff0050, #00f2ea);
+            background: linear-gradient(135deg, #ff0050, #00f2ea, #ff0050);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
             letter-spacing: -0.5px;
         }
 
@@ -177,8 +243,8 @@
 
         .header .header-icons i {
             cursor: pointer;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-            transition: transform 0.2s;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            transition: all 0.2s;
         }
 
         .header .header-icons i:active {
@@ -195,9 +261,10 @@
             display: flex;
             justify-content: center;
             gap: 32px;
-            padding: 8px 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             max-width: 430px;
             margin: 0 auto;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -211,8 +278,9 @@
             font-weight: 600;
             cursor: pointer;
             padding: 4px 0;
-            transition: color 0.3s;
+            transition: all 0.3s;
             position: relative;
+            font-family: inherit;
         }
 
         .feed-tabs .tab.active {
@@ -222,13 +290,25 @@
         .feed-tabs .tab.active::after {
             content: '';
             position: absolute;
-            bottom: -4px;
+            bottom: -6px;
             left: 50%;
             transform: translateX(-50%);
             width: 24px;
             height: 3px;
-            background: #ff0050;
+            background: linear-gradient(90deg, #ff0050, #00f2ea);
             border-radius: 4px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 24px;
+                opacity: 1;
+            }
         }
 
         .feed-tabs .tab:hover {
@@ -241,7 +321,7 @@
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
-            padding-top: 100px;
+            padding-top: 105px;
         }
 
         .feed-container::-webkit-scrollbar {
@@ -250,7 +330,8 @@
 
         /* ===== VIDEO ITEM ===== */
         .video-item {
-            height: 100vh;
+            height: calc(100vh - 105px);
+            min-height: 600px;
             width: 100%;
             scroll-snap-align: start;
             position: relative;
@@ -258,6 +339,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
         .video-item video {
@@ -267,16 +349,42 @@
             position: absolute;
             top: 0;
             left: 0;
+            background: #000;
+        }
+
+        /* Video Gradient Overlay */
+        .video-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 1;
         }
 
         /* Video Info */
         .video-info {
             position: absolute;
-            bottom: 120px;
+            bottom: 100px;
             left: 16px;
             right: 80px;
             z-index: 10;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+            animation: fadeUp 0.5s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .video-info .username {
@@ -287,24 +395,27 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            transition: opacity 0.3s;
         }
 
         .video-info .username:hover {
-            text-decoration: underline;
+            opacity: 0.8;
         }
 
         .video-info .username .badge {
-            background: #ff0050;
+            background: linear-gradient(135deg, #ff0050, #ff2d55);
             font-size: 10px;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border-radius: 12px;
             font-weight: 600;
+            animation: pulse 2s infinite;
         }
 
         .video-info .description {
             font-size: 15px;
-            opacity: 0.9;
-            line-height: 1.4;
+            opacity: 0.95;
+            line-height: 1.5;
+            margin-top: 2px;
         }
 
         .video-info .music {
@@ -314,18 +425,37 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .video-info .music:hover {
+            opacity: 1;
+        }
+
+        .video-info .music i {
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ===== ACTION BUTTONS ===== */
         .actions {
             position: absolute;
             right: 12px;
-            bottom: 120px;
+            bottom: 100px;
             z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
         }
 
         .actions .action-btn {
@@ -334,11 +464,12 @@
             align-items: center;
             gap: 2px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
             background: none;
             border: none;
             color: #fff;
             padding: 0;
+            position: relative;
         }
 
         .actions .action-btn:active {
@@ -347,42 +478,70 @@
 
         .actions .action-btn .icon {
             font-size: 28px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+            transition: all 0.3s;
         }
 
         .actions .action-btn .count {
             font-size: 12px;
             font-weight: 600;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
         }
 
         .actions .action-btn .avatar {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            border: 2px solid #fff;
+            border: 2.5px solid #fff;
             object-fit: cover;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .actions .action-btn .avatar:hover {
+            transform: scale(1.05);
+            border-color: #ff0050;
         }
 
         .actions .action-btn.liked .icon {
             color: #ff0050;
+            animation: likeAnimation 0.4s ease;
+        }
+
+        @keyframes likeAnimation {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.4);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         .actions .action-btn .follow-btn {
-            background: #ff0050;
+            background: linear-gradient(135deg, #ff0050, #ff2d55);
             border: none;
             color: #fff;
             font-size: 10px;
             font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 4px 14px;
+            border-radius: 16px;
             cursor: pointer;
+            transition: all 0.3s;
             margin-top: 2px;
-            transition: background 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 0, 80, 0.3);
+        }
+
+        .actions .action-btn .follow-btn:active {
+            transform: scale(0.9);
         }
 
         .actions .action-btn .follow-btn.following {
             background: #333;
+            box-shadow: none;
         }
 
         /* ===== BOTTOM NAV ===== */
@@ -393,13 +552,15 @@
             right: 0;
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
+            align-items: flex-end;
             padding: 6px 0 env(safe-area-inset-bottom);
             max-width: 430px;
             margin: 0 auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .bottom-nav .nav-item {
@@ -413,33 +574,45 @@
             font-size: 10px;
             cursor: pointer;
             padding: 4px 12px;
-            transition: color 0.2s;
+            transition: all 0.3s;
             font-weight: 500;
+            font-family: inherit;
         }
 
         .bottom-nav .nav-item i {
             font-size: 24px;
+            transition: all 0.3s;
         }
 
         .bottom-nav .nav-item.active {
             color: #fff;
         }
 
+        .bottom-nav .nav-item.active i {
+            color: #fff;
+            transform: scale(1.05);
+        }
+
         .bottom-nav .nav-item .upload-icon {
             background: linear-gradient(135deg, #ff0050, #00f2ea);
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: -20px;
-            font-size: 24px;
+            margin-top: -24px;
+            font-size: 26px;
             color: #fff;
-            box-shadow: 0 4px 20px rgba(255, 0, 80, 0.4);
+            box-shadow: 0 4px 30px rgba(255, 0, 80, 0.4);
+            transition: all 0.3s;
         }
 
-        /* ===== MODAL ===== */
+        .bottom-nav .nav-item .upload-icon:active {
+            transform: scale(0.9);
+        }
+
+        /* ===== MODALS ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -448,11 +621,13 @@
             display: none;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             max-width: 430px;
             margin: 0 auto;
             left: 50%;
             transform: translateX(-50%);
+            animation: fadeIn 0.3s ease;
         }
 
         .modal-overlay.active {
@@ -465,8 +640,20 @@
             padding: 28px 24px;
             max-width: 400px;
             width: 90%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-content .modal-header {
@@ -478,6 +665,7 @@
 
         .modal-content .modal-header h2 {
             font-size: 20px;
+            font-weight: 700;
         }
 
         .modal-content .close-modal {
@@ -487,6 +675,11 @@
             font-size: 24px;
             cursor: pointer;
             padding: 4px 8px;
+            transition: transform 0.3s;
+        }
+
+        .modal-content .close-modal:hover {
+            transform: rotate(90deg);
         }
 
         .modal-content input,
@@ -495,18 +688,19 @@
             padding: 12px 14px;
             margin-bottom: 12px;
             background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 12px;
+            border: 2px solid #333;
+            border-radius: 14px;
             color: #fff;
             font-size: 15px;
             font-family: inherit;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
         .modal-content input:focus,
         .modal-content textarea:focus {
             outline: none;
             border-color: #ff0050;
+            box-shadow: 0 0 0 4px rgba(255, 0, 80, 0.1);
         }
 
         .modal-content textarea {
@@ -519,10 +713,12 @@
             border: 2px dashed #444;
             padding: 24px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .modal-content input[type="file"]:hover {
             border-color: #ff0050;
+            background: rgba(255, 0, 80, 0.05);
         }
 
         .modal-content .upload-btn {
@@ -530,16 +726,21 @@
             padding: 14px;
             background: linear-gradient(135deg, #ff0050, #ff2d55);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: #fff;
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.3s;
+            transition: all 0.3s;
         }
 
         .modal-content .upload-btn:hover {
-            opacity: 0.8;
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(255, 0, 80, 0.3);
+        }
+
+        .modal-content .upload-btn:active {
+            transform: scale(0.98);
         }
 
         /* ===== COMMENTS ===== */
@@ -555,23 +756,25 @@
         }
 
         .comments-section::-webkit-scrollbar-thumb {
-            background: #333;
+            background: #ff0050;
             border-radius: 4px;
         }
 
         .comment-item {
             display: flex;
             gap: 10px;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #222;
+            animation: fadeIn 0.3s ease;
         }
 
         .comment-item .comment-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #333;
             flex-shrink: 0;
+            object-fit: cover;
         }
 
         .comment-item .comment-body {
@@ -581,27 +784,39 @@
         .comment-item .comment-body .comment-username {
             font-weight: 600;
             font-size: 13px;
+            color: #ff0050;
         }
 
         .comment-item .comment-body .comment-text {
             font-size: 14px;
-            opacity: 0.9;
+            opacity: 0.95;
+            margin-top: 2px;
+        }
+
+        .comment-item .comment-body .comment-time {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
         }
 
         .comment-input-row {
             display: flex;
             gap: 10px;
-            margin-top: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #222;
         }
 
         .comment-input-row input {
             flex: 1;
-            padding: 10px 14px;
+            padding: 10px 16px;
             background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 20px;
+            border: 2px solid #333;
+            border-radius: 24px;
             color: #fff;
             font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
         }
 
         .comment-input-row input:focus {
@@ -610,39 +825,101 @@
         }
 
         .comment-input-row button {
-            padding: 8px 16px;
-            background: #ff0050;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff0050, #ff2d55);
             border: none;
-            border-radius: 20px;
+            border-radius: 24px;
             color: #fff;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .comment-input-row button:hover {
+            transform: scale(1.05);
+        }
+
+        .comment-input-row button:active {
+            transform: scale(0.95);
         }
 
         /* ===== PROFILE ===== */
         .profile-header {
             text-align: center;
-            padding: 20px;
+            padding: 10px 0 20px;
         }
 
-        .profile-header .profile-avatar {
-            width: 80px;
-            height: 80px;
+        .profile-header .profile-avatar-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 12px;
+            cursor: pointer;
+        }
+
+        .profile-header .profile-avatar-wrapper .profile-avatar {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 3px solid #ff0050;
-            margin: 0 auto 12px;
+            object-fit: cover;
+            transition: all 0.3s;
+        }
+
+        .profile-header .profile-avatar-wrapper .profile-avatar:hover {
+            transform: scale(1.05);
+            border-color: #00f2ea;
+        }
+
+        .profile-header .profile-avatar-wrapper .edit-avatar-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #ff0050;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #1a1a1a;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-header .profile-avatar-wrapper .edit-avatar-overlay:hover {
+            transform: scale(1.1);
+            background: #00f2ea;
+        }
+
+        .profile-header .profile-avatar-wrapper .edit-avatar-overlay i {
+            font-size: 14px;
         }
 
         .profile-header .profile-name {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
+        }
+
+        .profile-header .profile-username {
+            color: #888;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .profile-header .profile-bio {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 6px;
+            padding: 0 20px;
         }
 
         .profile-header .profile-stats {
             display: flex;
             justify-content: center;
-            gap: 32px;
-            margin: 12px 0;
+            gap: 40px;
+            margin: 16px 0;
         }
 
         .profile-header .profile-stats div {
@@ -650,13 +927,69 @@
         }
 
         .profile-header .profile-stats .num {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
+            color: #fff;
         }
 
         .profile-header .profile-stats .label {
             font-size: 12px;
             color: #888;
+            margin-top: 2px;
+        }
+
+        .profile-header .profile-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .profile-header .profile-actions button {
+            padding: 8px 24px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .profile-header .profile-actions button:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-header .profile-actions button:active {
+            transform: scale(0.95);
+        }
+
+        .profile-header .profile-actions .follow-btn-pro {
+            background: linear-gradient(135deg, #ff0050, #ff2d55);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(255, 0, 80, 0.3);
+        }
+
+        .profile-header .profile-actions .follow-btn-pro.following {
+            background: #333;
+            box-shadow: none;
+        }
+
+        .profile-header .profile-actions .edit-btn {
+            background: #333;
+            color: #fff;
+        }
+
+        .profile-header .profile-actions .logout-btn {
+            background: transparent;
+            border: 2px solid #333;
+            color: #ff0050;
+        }
+
+        .profile-header .profile-actions .logout-btn:hover {
+            border-color: #ff0050;
+            background: rgba(255, 0, 80, 0.05);
         }
 
         .profile-videos {
@@ -669,10 +1002,16 @@
         .profile-videos .profile-video-thumb {
             aspect-ratio: 1;
             background: #222;
-            border-radius: 4px;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
             position: relative;
+            transition: all 0.3s;
+        }
+
+        .profile-videos .profile-video-thumb:hover {
+            transform: scale(1.02);
+            z-index: 1;
         }
 
         .profile-videos .profile-video-thumb video {
@@ -686,8 +1025,243 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 24px;
-            opacity: 0.5;
+            font-size: 28px;
+            opacity: 0.7;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+        }
+
+        .profile-videos .profile-video-thumb .video-views {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            font-size: 11px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ===== SEARCH ===== */
+        .search-container {
+            padding: 16px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #2a2a2a;
+            border: 2px solid #333;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #ff0050;
+            box-shadow: 0 0 0 4px rgba(255, 0, 80, 0.1);
+        }
+
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .search-results .search-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-results .search-item:hover {
+            background: #2a2a2a;
+            transform: translateX(4px);
+        }
+
+        .search-results .search-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .search-results .search-item .search-name {
+            font-weight: 600;
+        }
+
+        .search-results .search-item .search-username {
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* ===== NOTIFICATIONS ===== */
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+
+        .notification-item:hover {
+            background: #2a2a2a;
+        }
+
+        .notification-item .notif-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0050, #ff2d55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notification-item .notif-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .notification-item .notif-time {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* ===== INBOX ===== */
+        .inbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .inbox-item:hover {
+            background: #2a2a2a;
+            transform: translateX(4px);
+        }
+
+        .inbox-item img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .inbox-item .inbox-info {
+            flex: 1;
+        }
+
+        .inbox-item .inbox-info .inbox-name {
+            font-weight: 600;
+        }
+
+        .inbox-item .inbox-info .inbox-msg {
+            font-size: 13px;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            max-width: 380px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            font-weight: 500;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 60vh;
+            color: #666;
+            text-align: center;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+            background: linear-gradient(135deg, #ff0050, #00f2ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .empty-state h3 {
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .empty-state p {
+            color: #888;
+            font-size: 14px;
+            max-width: 280px;
+            line-height: 1.5;
+        }
+
+        .empty-state .empty-btn {
+            margin-top: 20px;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #ff0050, #ff2d55);
+            border: none;
+            border-radius: 24px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .empty-state .empty-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 0, 80, 0.3);
         }
 
         /* ===== RESPONSIVE ===== */
@@ -703,82 +1277,155 @@
             }
             .feed-tabs {
                 max-width: 100%;
+                top: 56px;
+                gap: 24px;
             }
             .bottom-nav {
                 max-width: 100%;
             }
             .video-info {
-                bottom: 100px;
+                bottom: 90px;
                 left: 12px;
                 right: 70px;
             }
+            .video-info .username {
+                font-size: 16px;
+            }
+            .video-info .description {
+                font-size: 14px;
+            }
             .actions {
                 right: 8px;
-                bottom: 100px;
-                gap: 16px;
+                bottom: 90px;
+                gap: 14px;
             }
             .actions .action-btn .icon {
                 font-size: 24px;
             }
+            .actions .action-btn .avatar {
+                width: 44px;
+                height: 44px;
+            }
+            .bottom-nav .nav-item .upload-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 22px;
+                margin-top: -22px;
+            }
+            .profile-header .profile-avatar-wrapper {
+                width: 80px;
+                height: 80px;
+            }
+            .profile-header .profile-avatar-wrapper .profile-avatar {
+                width: 80px;
+                height: 80px;
+            }
+            .profile-header .profile-stats {
+                gap: 24px;
+            }
+            .toast {
+                bottom: 80px;
+                max-width: 320px;
+                font-size: 13px;
+                padding: 12px 20px;
+            }
         }
 
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            max-width: 380px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        @media (max-width: 360px) {
+            .feed-tabs .tab {
+                font-size: 14px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .bottom-nav .nav-item {
+                font-size: 9px;
+                padding: 2px 8px;
+            }
+            .bottom-nav .nav-item i {
+                font-size: 20px;
+            }
         }
 
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* Empty state */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 60vh;
-            color: #666;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .empty-state i {
-            font-size: 60px;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-state h3 {
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .empty-state .empty-btn {
-            margin-top: 16px;
-            padding: 12px 32px;
-            background: #ff0050;
-            border: none;
-            border-radius: 24px;
-            color: #fff;
-            font-size: 16px;
+        /* ===== HD QUALITY INDICATOR ===== */
+        .hd-badge {
+            position: absolute;
+            top: 80px;
+            right: 12px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
             font-weight: 700;
-            cursor: pointer;
+            color: #00f2ea;
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
+
+        /* ===== LOADING SHIMMER ===== */
+        .shimmer {
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .video-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 5;
+        }
+
+        .video-progress .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0050, #00f2ea);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* ===== DOUBLE TAP LIKE ===== */
+        .heart-burst {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            color: #ff0050;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0;
+            animation: heartBurst 0.8s ease forwards;
+        }
+
+        @keyframes heartBurst {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+            30% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(2);
+            }
         }
     </style>
 </head>
@@ -790,7 +1437,7 @@
     <!-- ===== AUTH SCREEN ===== -->
     <div class="auth-screen" id="authScreen">
         <div class="logo">♬ MudassirTok</div>
-        <div class="subtitle">Share your world, one video at a time</div>
+        <div class="subtitle">Share your world, one video at a time ✨</div>
 
         <div class="auth-box">
             <div id="authForm">
@@ -813,7 +1460,7 @@
         <div class="header">
             <h1>♬ MudassirTok</h1>
             <div class="header-icons">
-                <i class="fas fa-search" onclick="showToast('🔍 Search coming soon!')"></i>
+                <i class="fas fa-search" onclick="openSearch()"></i>
                 <i class="fas fa-plus-circle" onclick="openUploadModal()"></i>
                 <i class="fas fa-user" onclick="openProfile()"></i>
                 <i class="fas fa-sign-out-alt" onclick="logout()" style="font-size:18px;"></i>
@@ -833,14 +1480,14 @@
 
         <!-- Bottom Nav -->
         <div class="bottom-nav">
-            <button class="nav-item active"><i class="fas fa-home"></i><span>Home</span></button>
-            <button class="nav-item" onclick="openProfile()"><i class="fas fa-user"></i><span>Profile</span></button>
+            <button class="nav-item active" onclick="switchTab('for-you')"><i class="fas fa-home"></i><span>Home</span></button>
+            <button class="nav-item" onclick="openSearch()"><i class="fas fa-search"></i><span>Search</span></button>
             <button class="nav-item" onclick="openUploadModal()">
                 <div class="upload-icon"><i class="fas fa-plus"></i></div>
                 <span>Upload</span>
             </button>
-            <button class="nav-item" onclick="showToast('📥 Inbox coming soon!')"><i class="fas fa-envelope"></i><span>Inbox</span></button>
-            <button class="nav-item" onclick="showToast('🔔 Notifications coming soon!')"><i class="fas fa-bell"></i><span>Activity</span></button>
+            <button class="nav-item" onclick="openInbox()"><i class="fas fa-envelope"></i><span>Inbox</span></button>
+            <button class="nav-item" onclick="openNotifications()"><i class="fas fa-bell"></i><span>Activity</span></button>
         </div>
     </div>
 
@@ -854,7 +1501,8 @@
             <form id="uploadForm" onsubmit="handleUpload(event)">
                 <input type="file" id="videoFile" accept="video/*" required>
                 <input type="text" id="descInput" placeholder="Write a caption..." maxlength="150">
-                <button type="submit" class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
+                <input type="text" id="musicInput" placeholder="Add music name (optional)">
+                <button type="submit" class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> Upload HD Video</button>
             </form>
         </div>
     </div>
@@ -888,6 +1536,51 @@
             </div>
         </div>
     </div>
+
+    <!-- ===== SEARCH MODAL ===== -->
+    <div class="modal-overlay" id="searchModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h2>🔍 Search</h2>
+                <button class="close-modal" onclick="closeSearch()">&times;</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search users..." oninput="performSearch()">
+                <div class="search-results" id="searchResults">
+                    <div style="text-align:center;color:#666;padding:20px;">Search for users by username</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== INBOX MODAL ===== -->
+    <div class="modal-overlay" id="inboxModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h2>📥 Inbox</h2>
+                <button class="close-modal" onclick="closeInbox()">&times;</button>
+            </div>
+            <div id="inboxContent">
+                <!-- Inbox messages injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== NOTIFICATIONS MODAL ===== -->
+    <div class="modal-overlay" id="notificationsModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h2>🔔 Activity</h2>
+                <button class="close-modal" onclick="closeNotifications()">&times;</button>
+            </div>
+            <div id="notificationsContent">
+                <!-- Notifications injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== AVATAR UPLOAD (hidden) ===== -->
+    <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
 
     <script>
         // ============================================================
@@ -926,6 +1619,18 @@
             setFollows(follows) {
                 localStorage.setItem('mudassirtok_follows', JSON.stringify(follows));
             },
+            getNotifications() {
+                return JSON.parse(localStorage.getItem('mudassirtok_notifications') || '[]');
+            },
+            setNotifications(notifications) {
+                localStorage.setItem('mudassirtok_notifications', JSON.stringify(notifications));
+            },
+            getInbox() {
+                return JSON.parse(localStorage.getItem('mudassirtok_inbox') || '[]');
+            },
+            setInbox(inbox) {
+                localStorage.setItem('mudassirtok_inbox', JSON.stringify(inbox));
+            },
             getCurrentUser() {
                 return JSON.parse(localStorage.getItem('mudassirtok_current_user') || 'null');
             },
@@ -942,10 +1647,10 @@
         // ===== STATE =====
         let currentUser = null;
         let currentTab = 'for-you';
-        let currentVideoId = null;
         let commentVideoId = null;
         let allVideos = [];
         let observer = null;
+        let viewCounts = {};
 
         // ===== AUTH =====
         function initAuth() {
@@ -968,6 +1673,13 @@
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.add('active');
             loadFeed();
+            updateNav();
+        }
+
+        function updateNav() {
+            document.querySelectorAll('.bottom-nav .nav-item').forEach((item, index) => {
+                item.classList.toggle('active', index === 0);
+            });
         }
 
         function setupAuthListeners() {
@@ -976,11 +1688,21 @@
             document.getElementById('authSubmitBtn').addEventListener('click', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('authName').value.trim();
-                const username = document.getElementById('authUsername').value.trim();
+                const username = document.getElementById('authUsername').value.trim().toLowerCase();
                 const password = document.getElementById('authPassword').value.trim();
 
                 if (!name || !username || !password) {
                     showToast('⚠️ Please fill in all fields');
+                    return;
+                }
+
+                if (username.length < 3) {
+                    showToast('⚠️ Username must be at least 3 characters');
+                    return;
+                }
+
+                if (password.length < 4) {
+                    showToast('⚠️ Password must be at least 4 characters');
                     return;
                 }
 
@@ -1008,7 +1730,8 @@
                         name: name,
                         username: username,
                         password: password,
-                        avatar: 'https://i.pravatar.cc/150?img=' + DB.getNextId(),
+                        avatar: 'https://i.pravatar.cc/300?img=' + DB.getNextId(),
+                        bio: 'Welcome to MudassirTok! 🎬',
                         joined: new Date().toISOString()
                     };
                     users.push(newUser);
@@ -1043,15 +1766,22 @@
                     nameInput.style.display = 'block';
                 }
 
-                // Re-bind switch link
                 document.getElementById('authSwitchLink').addEventListener('click', () => {
                     document.getElementById('authSwitchBtn').click();
                 });
             });
 
-            // Initial switch link
             document.getElementById('authSwitchLink').addEventListener('click', () => {
                 document.getElementById('authSwitchBtn').click();
+            });
+
+            // Enter key support
+            document.querySelectorAll('#authForm input').forEach(input => {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        document.getElementById('authSubmitBtn').click();
+                    }
+                });
             });
         }
 
@@ -1077,8 +1807,10 @@
                 videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
                 likes: 0,
                 comments: 0,
+                views: 0,
                 timestamp: new Date().toISOString(),
-                isWelcome: true
+                isWelcome: true,
+                hd: true
             };
             videos.unshift(welcomeVid);
             DB.setVideos(videos);
@@ -1100,15 +1832,18 @@
             if (currentTab === 'following' && currentUser) {
                 const follows = DB.getFollows();
                 const following = follows[currentUser.id] || [];
-                feedVideos = feedVideos.filter(v => following.includes(v.userId));
+                feedVideos = feedVideos.filter(v => following.includes(v.userId) || v.userId === currentUser.id);
             }
+
+            // Sort by newest first
+            feedVideos.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             if (feedVideos.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state" style="height:100vh;justify-content:center;">
                         <i class="fas fa-video"></i>
                         <h3>No videos yet</h3>
-                        <p style="color:#666;font-size:14px;max-width:280px;">
+                        <p style="color:#888;font-size:14px;max-width:280px;line-height:1.5;">
                             ${currentTab === 'following' ? 'Follow someone to see their videos!' : 'Be the first to upload a video!'}
                         </p>
                         <button class="empty-btn" onclick="openUploadModal()">+ Upload Video</button>
@@ -1131,12 +1866,30 @@
                 videoEl.loop = true;
                 videoEl.preload = 'metadata';
                 videoEl.setAttribute('playsinline', '');
+                videoEl.setAttribute('webkit-playsinline', '');
+                videoEl.volume = 0;
                 div.appendChild(videoEl);
+
+                // HD Badge
+                if (video.hd !== false) {
+                    const hdBadge = document.createElement('div');
+                    hdBadge.className = 'hd-badge';
+                    hdBadge.textContent = 'HD • 1080p';
+                    div.appendChild(hdBadge);
+                }
+
+                // Progress bar
+                const progressDiv = document.createElement('div');
+                progressDiv.className = 'video-progress';
+                const progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+                progressDiv.appendChild(progressBar);
+                div.appendChild(progressDiv);
 
                 // Video Info
                 const info = document.createElement('div');
                 info.className = 'video-info';
-                const isFollowing = isUserFollowing(currentUser?.id, video.userId);
+                const isFollowing = currentUser && isUserFollowing(currentUser.id, video.userId);
                 info.innerHTML = `
                     <div class="username" onclick="viewProfile(${video.userId})">
                         @${video.username}
@@ -1155,18 +1908,18 @@
                 const avatarBtn = document.createElement('button');
                 avatarBtn.className = 'action-btn';
                 avatarBtn.innerHTML = `
-                    <img class="avatar" src="${video.userAvatar || 'https://i.pravatar.cc/150?img=' + video.userId}" 
+                    <img class="avatar" src="${video.userAvatar || 'https://i.pravatar.cc/300?img=' + video.userId}" 
                          alt="avatar" onclick="viewProfile(${video.userId})">
                 `;
                 actions.appendChild(avatarBtn);
 
-                // Follow button
+                // Follow button (only if not own video)
                 if (currentUser && video.userId !== currentUser.id) {
                     const followBtn = document.createElement('button');
                     followBtn.className = 'action-btn';
                     followBtn.innerHTML = `
                         <div class="follow-btn ${isFollowing ? 'following' : ''}" 
-                             onclick="toggleFollow(${video.userId})">
+                             onclick="event.stopPropagation();toggleFollow(${video.userId})">
                             ${isFollowing ? '✓ Following' : '+ Follow'}
                         </div>
                     `;
@@ -1213,6 +1966,26 @@
                 actions.appendChild(shareBtn);
 
                 div.appendChild(actions);
+
+                // Double tap to like
+                let lastTap = 0;
+                div.addEventListener('click', (e) => {
+                    const now = Date.now();
+                    if (now - lastTap < 300) {
+                        // Double tap!
+                        if (currentUser) {
+                            toggleLike(video.id);
+                            // Show heart animation
+                            const heart = document.createElement('div');
+                            heart.className = 'heart-burst';
+                            heart.innerHTML = '❤️';
+                            div.appendChild(heart);
+                            setTimeout(() => heart.remove(), 800);
+                        }
+                    }
+                    lastTap = now;
+                });
+
                 container.appendChild(div);
             });
 
@@ -1235,10 +2008,17 @@
             observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const video = entry.target.querySelector('video');
+                    const progress = entry.target.querySelector('.progress-bar');
                     if (!video) return;
 
                     if (entry.isIntersecting) {
                         video.play().catch(e => console.log('Autoplay blocked:', e));
+                        // Track view
+                        const videoId = parseInt(entry.target.dataset.videoId);
+                        if (videoId && !viewCounts[videoId]) {
+                            viewCounts[videoId] = true;
+                            trackView(videoId);
+                        }
                     } else {
                         video.pause();
                     }
@@ -1247,7 +2027,21 @@
 
             videoItems.forEach(item => observer.observe(item));
 
-            // Manual scroll handler
+            // Video progress tracking
+            videoItems.forEach(item => {
+                const video = item.querySelector('video');
+                const progress = item.querySelector('.progress-bar');
+                if (video && progress) {
+                    video.addEventListener('timeupdate', () => {
+                        if (video.duration) {
+                            const pct = (video.currentTime / video.duration) * 100;
+                            progress.style.width = pct + '%';
+                        }
+                    });
+                }
+            });
+
+            // Scroll handler for better UX
             container.addEventListener('scroll', () => {
                 const items = container.querySelectorAll('.video-item');
                 let bestItem = null;
@@ -1274,11 +2068,25 @@
             }, { passive: true });
         }
 
+        // ===== TRACK VIEWS =====
+        function trackView(videoId) {
+            const videos = DB.getVideos();
+            const video = videos.find(v => v.id === videoId);
+            if (video) {
+                video.views = (video.views || 0) + 1;
+                DB.setVideos(videos);
+                allVideos = videos;
+            }
+        }
+
         // ===== TAB SWITCHING =====
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.feed-tabs .tab').forEach(t => {
                 t.classList.toggle('active', t.dataset.tab === tab);
+            });
+            document.querySelectorAll('.bottom-nav .nav-item').forEach((item, index) => {
+                item.classList.toggle('active', index === 0);
             });
             loadFeed();
         }
@@ -1296,10 +2104,14 @@
             }
 
             const index = likes[currentUser.id].indexOf(videoId);
+            let liked = false;
             if (index > -1) {
                 likes[currentUser.id].splice(index, 1);
             } else {
                 likes[currentUser.id].push(videoId);
+                liked = true;
+                // Add notification for like
+                addNotification(currentUser.id, videoId, 'liked');
             }
 
             DB.setLikes(likes);
@@ -1341,16 +2153,24 @@
             }
 
             const index = follows[currentUser.id].indexOf(userId);
+            let following = false;
             if (index > -1) {
                 follows[currentUser.id].splice(index, 1);
                 showToast('Unfollowed user');
             } else {
                 follows[currentUser.id].push(userId);
+                following = true;
                 showToast('✅ Following!');
+                addNotification(userId, null, 'followed');
             }
 
             DB.setFollows(follows);
-            renderFeed(); // Refresh to update follow buttons
+            renderFeed();
+
+            // Update profile if open
+            if (document.getElementById('profileModal').classList.contains('active')) {
+                viewProfile(userId);
+            }
         }
 
         function isUserFollowing(followerId, followeeId) {
@@ -1359,12 +2179,75 @@
             return follows[followerId] && follows[followerId].includes(followeeId);
         }
 
+        function getFollowerCount(userId) {
+            const follows = DB.getFollows();
+            let count = 0;
+            for (const key in follows) {
+                if (follows[key].includes(userId)) count++;
+            }
+            return count;
+        }
+
+        function getFollowingCount(userId) {
+            const follows = DB.getFollows();
+            return (follows[userId] || []).length;
+        }
+
+        // ===== NOTIFICATIONS =====
+        function addNotification(targetUserId, videoId, type) {
+            if (!currentUser || targetUserId === currentUser.id) return;
+
+            const notifications = DB.getNotifications();
+            const video = videoId ? allVideos.find(v => v.id === videoId) : null;
+
+            notifications.unshift({
+                id: DB.getNextId(),
+                userId: currentUser.id,
+                username: currentUser.username,
+                userAvatar: currentUser.avatar,
+                targetUserId: targetUserId,
+                videoId: videoId,
+                type: type,
+                message: type === 'liked' ?
+                    `❤️ liked your video${video ? ': ' + (video.description || '') : ''}` :
+                    type === 'followed' ?
+                    '🤝 started following you' :
+                    type === 'commented' ?
+                    `💬 commented on your video${video ? ': ' + (video.description || '') : ''}` :
+                    '',
+                read: false,
+                timestamp: new Date().toISOString()
+            });
+
+            DB.setNotifications(notifications);
+        }
+
+        function getNotifications() {
+            const notifications = DB.getNotifications();
+            if (currentUser) {
+                return notifications.filter(n => n.targetUserId === currentUser.id);
+            }
+            return [];
+        }
+
+        function markNotificationsRead() {
+            const notifications = DB.getNotifications();
+            notifications.forEach(n => {
+                if (n.targetUserId === currentUser.id) {
+                    n.read = true;
+                }
+            });
+            DB.setNotifications(notifications);
+        }
+
         // ===== COMMENTS =====
         function openComments(videoId) {
             commentVideoId = videoId;
             document.getElementById('commentsModal').classList.add('active');
             renderComments(videoId);
-            document.getElementById('commentInput').focus();
+            setTimeout(() => {
+                document.getElementById('commentInput').focus();
+            }, 300);
         }
 
         function closeCommentsModal() {
@@ -1381,19 +2264,22 @@
                 section.innerHTML = `
                     <div style="text-align:center;color:#666;padding:30px 0;">
                         <i class="fas fa-comment" style="font-size:30px;opacity:0.3;"></i>
-                        <p style="margin-top:10px;">No comments yet. Be the first!</p>
+                        <p style="margin-top:10px;font-size:14px;">No comments yet. Be the first!</p>
                     </div>
                 `;
                 return;
             }
 
+            // Sort by newest first
+            videoComments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
             section.innerHTML = videoComments.map(c => `
                 <div class="comment-item">
-                    <img class="comment-avatar" src="${c.avatar || 'https://i.pravatar.cc/150?img=' + c.userId}" alt="">
+                    <img class="comment-avatar" src="${c.avatar || 'https://i.pravatar.cc/300?img=' + c.userId}" alt="">
                     <div class="comment-body">
                         <div class="comment-username">@${c.username}</div>
                         <div class="comment-text">${c.text}</div>
-                        <div style="font-size:11px;color:#666;margin-top:2px;">${new Date(c.timestamp).toLocaleDateString()}</div>
+                        <div class="comment-time">${timeAgo(new Date(c.timestamp))}</div>
                     </div>
                 </div>
             `).join('');
@@ -1418,6 +2304,7 @@
                 comments[commentVideoId] = [];
             }
 
+            const video = allVideos.find(v => v.id === commentVideoId);
             comments[commentVideoId].push({
                 userId: currentUser.id,
                 username: currentUser.username,
@@ -1430,14 +2317,27 @@
             input.value = '';
             renderComments(commentVideoId);
 
+            // Add notification
+            if (video && video.userId !== currentUser.id) {
+                addNotification(video.userId, commentVideoId, 'commented');
+            }
+
             // Update comment count in feed
-            const count = getCommentCount(commentVideoId);
-            const commentBtns = document.querySelectorAll(`.video-item[data-video-id="${commentVideoId}"] .action-btn`);
-            commentBtns.forEach(btn => {
-                const countEl = btn.querySelector('.count');
-                if (countEl && btn.querySelector('.fa-comment')) {
-                    countEl.textContent = count;
-                }
+            updateCommentCount(commentVideoId);
+            showToast('💬 Comment posted!');
+        }
+
+        function updateCommentCount(videoId) {
+            const count = getCommentCount(videoId);
+            const items = document.querySelectorAll(`.video-item[data-video-id="${videoId}"]`);
+            items.forEach(item => {
+                const btns = item.querySelectorAll('.action-btn');
+                btns.forEach(btn => {
+                    const countEl = btn.querySelector('.count');
+                    if (countEl && btn.querySelector('.fa-comment')) {
+                        countEl.textContent = count;
+                    }
+                });
             });
         }
 
@@ -1451,21 +2351,22 @@
             const video = allVideos.find(v => v.id === videoId);
             if (!video) return;
 
+            const shareText = `🎬 Check out this video from @${video.username} on MudassirTok! ${video.description || ''}`;
+
             if (navigator.share) {
                 navigator.share({
-                    title: video.description || 'Check out this video on MudassirTok!',
-                    text: `@${video.username}: ${video.description}`,
+                    title: 'MudassirTok Video',
+                    text: shareText,
                     url: window.location.href
+                }).catch(() => {});
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showToast('📋 Copied to clipboard!');
+                }).catch(() => {
+                    showToast('📋 ' + shareText);
                 });
             } else {
-                const text = `Check out this video from @${video.username} on MudassirTok!`;
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        showToast('📋 Copied to clipboard!');
-                    });
-                } else {
-                    showToast('📋 Share this: ' + text);
-                }
+                showToast('📋 ' + shareText);
             }
         }
 
@@ -1476,11 +2377,11 @@
                 return;
             }
             document.getElementById('uploadModal').classList.add('active');
+            document.getElementById('uploadForm').reset();
         }
 
         function closeUploadModal() {
             document.getElementById('uploadModal').classList.remove('active');
-            document.getElementById('uploadForm').reset();
         }
 
         function handleUpload(e) {
@@ -1492,6 +2393,7 @@
 
             const fileInput = document.getElementById('videoFile');
             const description = document.getElementById('descInput').value.trim() || 'No caption';
+            const music = document.getElementById('musicInput').value.trim() || '🎵 Original audio';
 
             const file = fileInput.files[0];
             if (!file) {
@@ -1499,9 +2401,15 @@
                 return;
             }
 
-            // Check file size (max 100MB)
-            if (file.size > 100 * 1024 * 1024) {
-                showToast('⚠️ Video too large! Max 100MB');
+            // Check file size (max 500MB for HD)
+            if (file.size > 500 * 1024 * 1024) {
+                showToast('⚠️ Video too large! Max 500MB');
+                return;
+            }
+
+            // Check if it's a video
+            if (!file.type.startsWith('video/')) {
+                showToast('⚠️ Please select a video file');
                 return;
             }
 
@@ -1513,11 +2421,13 @@
                 username: currentUser.username,
                 userAvatar: currentUser.avatar,
                 description: description,
-                music: '🎵 Uploaded video',
+                music: music,
                 videoUrl: videoUrl,
                 likes: 0,
                 comments: 0,
-                timestamp: new Date().toISOString()
+                views: 0,
+                timestamp: new Date().toISOString(),
+                hd: true // HD quality
             };
 
             const videos = DB.getVideos();
@@ -1527,8 +2437,7 @@
 
             closeUploadModal();
             loadFeed();
-
-            showToast('✅ Video uploaded successfully!');
+            showToast('✅ HD Video uploaded successfully!');
 
             // Scroll to top
             document.getElementById('feedContainer').scrollTop = 0;
@@ -1552,47 +2461,59 @@
             }
 
             const videos = DB.getVideos().filter(v => v.userId === userId);
-            const follows = DB.getFollows();
-            const followers = Object.keys(follows).filter(key => follows[key].includes(userId)).length;
-            const following = (follows[userId] || []).length;
+            const followers = getFollowerCount(userId);
+            const following = getFollowingCount(userId);
             const isOwnProfile = currentUser && currentUser.id === userId;
             const isFollowing = currentUser && isUserFollowing(currentUser.id, userId);
 
             const content = document.getElementById('profileContent');
             content.innerHTML = `
                 <div class="profile-header">
-                    <img class="profile-avatar" src="${user.avatar}" alt="${user.username}">
+                    <div class="profile-avatar-wrapper" onclick="${isOwnProfile ? "document.getElementById('avatarInput').click()" : ''}">
+                        <img class="profile-avatar" src="${user.avatar}" alt="${user.username}">
+                        ${isOwnProfile ? `
+                            <div class="edit-avatar-overlay">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        ` : ''}
+                    </div>
                     <div class="profile-name">${user.name}</div>
-                    <div style="color:#888;font-size:14px;">@${user.username}</div>
+                    <div class="profile-username">@${user.username}</div>
+                    <div class="profile-bio">${user.bio || '🎬 TikTok content creator'}</div>
                     <div class="profile-stats">
                         <div><div class="num">${videos.length}</div><div class="label">Videos</div></div>
                         <div><div class="num">${followers}</div><div class="label">Followers</div></div>
                         <div><div class="num">${following}</div><div class="label">Following</div></div>
                     </div>
-                    ${!isOwnProfile && currentUser ? `
-                        <button onclick="toggleFollow(${userId})" 
-                                style="padding:8px 24px;background:${isFollowing ? '#333' : '#ff0050'};
-                                       border:none;border-radius:20px;color:#fff;font-weight:700;cursor:pointer;font-size:14px;">
-                            ${isFollowing ? '✓ Following' : '+ Follow'}
-                        </button>
-                    ` : ''}
-                    ${isOwnProfile ? `
-                        <button onclick="logout()" 
-                                style="padding:8px 24px;background:#333;border:none;border-radius:20px;color:#fff;font-weight:700;cursor:pointer;font-size:14px;margin-top:8px;">
-                            🚪 Logout
-                        </button>
-                    ` : ''}
+                    <div class="profile-actions">
+                        ${!isOwnProfile && currentUser ? `
+                            <button class="follow-btn-pro ${isFollowing ? 'following' : ''}" 
+                                    onclick="toggleFollow(${userId})">
+                                ${isFollowing ? '✓ Following' : '+ Follow'}
+                            </button>
+                        ` : ''}
+                        ${isOwnProfile ? `
+                            <button class="edit-btn" onclick="editProfile()">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                            <button class="logout-btn" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        ` : ''}
+                    </div>
                 </div>
                 <div class="profile-videos">
                     ${videos.length === 0 ? `
                         <div style="grid-column:1/-1;text-align:center;color:#666;padding:40px;">
                             <i class="fas fa-video" style="font-size:30px;opacity:0.3;"></i>
-                            <p style="margin-top:8px;">No videos yet</p>
+                            <p style="margin-top:8px;font-size:14px;">No videos yet</p>
+                            ${isOwnProfile ? `<button onclick="openUploadModal()" style="margin-top:12px;padding:8px 20px;background:#ff0050;border:none;border-radius:12px;color:#fff;font-weight:700;cursor:pointer;">Upload Now</button>` : ''}
                         </div>
                     ` : videos.map(v => `
                         <div class="profile-video-thumb" onclick="scrollToVideo(${v.id})">
                             <video src="${v.videoUrl}" muted playsinline></video>
                             <div class="play-icon"><i class="fas fa-play"></i></div>
+                            ${v.views ? `<div class="video-views"><i class="fas fa-eye"></i> ${v.views}</div>` : ''}
                         </div>
                     `).join('')}
                 </div>
@@ -1605,6 +2526,61 @@
             document.getElementById('profileModal').classList.remove('active');
         }
 
+        function editProfile() {
+            if (!currentUser) return;
+            const newBio = prompt('Edit your bio:', currentUser.bio || '');
+            if (newBio !== null) {
+                const users = DB.getUsers();
+                const user = users.find(u => u.id === currentUser.id);
+                if (user) {
+                    user.bio = newBio.trim() || '🎬 TikTok content creator';
+                    DB.setUsers(users);
+                    currentUser = user;
+                    DB.setCurrentUser(user);
+                    viewProfile(currentUser.id);
+                    showToast('✅ Profile updated!');
+                }
+            }
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showToast('⚠️ Please select an image');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const users = DB.getUsers();
+                const user = users.find(u => u.id === currentUser.id);
+                if (user) {
+                    user.avatar = e.target.result;
+                    DB.setUsers(users);
+                    currentUser = user;
+                    DB.setCurrentUser(user);
+
+                    // Update all videos with new avatar
+                    const videos = DB.getVideos();
+                    videos.forEach(v => {
+                        if (v.userId === currentUser.id) {
+                            v.userAvatar = e.target.result;
+                        }
+                    });
+                    DB.setVideos(videos);
+                    allVideos = videos;
+
+                    viewProfile(currentUser.id);
+                    loadFeed();
+                    showToast('✅ Profile picture updated!');
+                }
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
         function scrollToVideo(videoId) {
             closeProfile();
             const items = document.querySelectorAll('.video-item');
@@ -1614,6 +2590,160 @@
                     break;
                 }
             }
+        }
+
+        // ===== SEARCH =====
+        function openSearch() {
+            document.getElementById('searchModal').classList.add('active');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').innerHTML =
+                '<div style="text-align:center;color:#666;padding:20px;">Search for users by username</div>';
+            setTimeout(() => {
+                document.getElementById('searchInput').focus();
+            }, 300);
+        }
+
+        function closeSearch() {
+            document.getElementById('searchModal').classList.remove('active');
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const results = document.getElementById('searchResults');
+
+            if (!query) {
+                results.innerHTML = '<div style="text-align:center;color:#666;padding:20px;">Search for users by username</div>';
+                return;
+            }
+
+            const users = DB.getUsers();
+            const filtered = users.filter(u =>
+                u.username.toLowerCase().includes(query) ||
+                u.name.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                results.innerHTML = `
+                    <div style="text-align:center;color:#666;padding:20px;">
+                        <i class="fas fa-user-slash" style="font-size:24px;opacity:0.3;"></i>
+                        <p style="margin-top:8px;">No users found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            results.innerHTML = filtered.map(u => `
+                <div class="search-item" onclick="viewProfile(${u.id});closeSearch();">
+                    <img src="${u.avatar}" alt="${u.username}">
+                    <div>
+                        <div class="search-name">${u.name}</div>
+                        <div class="search-username">@${u.username}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== INBOX =====
+        function openInbox() {
+            document.getElementById('inboxModal').classList.add('active');
+            renderInbox();
+        }
+
+        function closeInbox() {
+            document.getElementById('inboxModal').classList.remove('active');
+        }
+
+        function renderInbox() {
+            const inbox = DB.getInbox();
+            const content = document.getElementById('inboxContent');
+
+            if (inbox.length === 0) {
+                content.innerHTML = `
+                    <div style="text-align:center;color:#666;padding:40px;">
+                        <i class="fas fa-inbox" style="font-size:40px;opacity:0.3;"></i>
+                        <p style="margin-top:10px;font-size:14px;">No messages yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            content.innerHTML = inbox.map(msg => `
+                <div class="inbox-item">
+                    <img src="${msg.avatar || 'https://i.pravatar.cc/300?img=' + msg.userId}" alt="">
+                    <div class="inbox-info">
+                        <div class="inbox-name">${msg.name}</div>
+                        <div class="inbox-msg">${msg.message}</div>
+                    </div>
+                    <div style="font-size:11px;color:#666;">${timeAgo(new Date(msg.timestamp))}</div>
+                </div>
+            `).join('');
+        }
+
+        function sendMessage(userId, message) {
+            const users = DB.getUsers();
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const inbox = DB.getInbox();
+            inbox.push({
+                userId: userId,
+                name: user.name,
+                avatar: user.avatar,
+                message: message,
+                timestamp: new Date().toISOString()
+            });
+            DB.setInbox(inbox);
+        }
+
+        // ===== NOTIFICATIONS =====
+        function openNotifications() {
+            document.getElementById('notificationsModal').classList.add('active');
+            renderNotifications();
+            markNotificationsRead();
+        }
+
+        function closeNotifications() {
+            document.getElementById('notificationsModal').classList.remove('active');
+        }
+
+        function renderNotifications() {
+            const notifications = getNotifications();
+            const content = document.getElementById('notificationsContent');
+
+            if (notifications.length === 0) {
+                content.innerHTML = `
+                    <div style="text-align:center;color:#666;padding:40px;">
+                        <i class="fas fa-bell" style="font-size:40px;opacity:0.3;"></i>
+                        <p style="margin-top:10px;font-size:14px;">No notifications yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            content.innerHTML = notifications.slice(0, 50).map(n => `
+                <div class="notification-item">
+                    <div class="notif-icon">
+                        ${n.type === 'liked' ? '❤️' : n.type === 'followed' ? '🤝' : '💬'}
+                    </div>
+                    <div class="notif-text">
+                        <strong>@${n.username}</strong> ${n.message}
+                    </div>
+                    <div class="notif-time">${timeAgo(new Date(n.timestamp))}</div>
+                </div>
+            `).join('');
+        }
+
+        // ===== TIME AGO =====
+        function timeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return minutes + 'm ago';
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return hours + 'h ago';
+            const days = Math.floor(hours / 24);
+            if (days < 7) return days + 'd ago';
+            return date.toLocaleDateString();
         }
 
         // ===== TOAST =====
@@ -1635,9 +2765,17 @@
                 closeUploadModal();
                 closeCommentsModal();
                 closeProfile();
+                closeSearch();
+                closeInbox();
+                closeNotifications();
             }
             if (e.key === 'u' && !e.ctrlKey && !e.metaKey) {
                 openUploadModal();
+            }
+            if (e.key === 'Enter' && document.getElementById('commentsModal').classList.contains('active')) {
+                if (document.activeElement === document.getElementById('commentInput')) {
+                    postComment();
+                }
             }
         });
 
@@ -1650,23 +2788,24 @@
                 modal.addEventListener('click', (e) => {
                     if (e.target === e.currentTarget) {
                         modal.classList.remove('active');
-                        if (modal.id === 'uploadModal') closeUploadModal();
-                        if (modal.id === 'commentsModal') closeCommentsModal();
-                        if (modal.id === 'profileModal') closeProfile();
                     }
                 });
             });
 
-            // Enter key for comments
-            document.getElementById('commentInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') postComment();
-            });
+            // Reset auth form on load
+            document.getElementById('authName').value = '';
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authPassword').value = '';
 
-            console.log('🎬 MudassirTok loaded!');
+            console.log('🎬 MudassirTok v2.0 Loaded!');
             console.log('👤 Current user:', currentUser);
             console.log('📹 Total videos:', DB.getVideos().length);
+            console.log('👥 Total users:', DB.getUsers().length);
             console.log('💬 Total comments:', Object.keys(DB.getComments()).length);
+            console.log('❤️ Total likes:', Object.keys(DB.getLikes()).length);
+            console.log('🤝 Total follows:', Object.keys(DB.getFollows()).length);
         });
     </script>
+
 </body>
 </html>
